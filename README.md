@@ -7,7 +7,7 @@
 Extension Firefox, Chrome et Edge pour tester des formulaires français.
 Un clic droit sur un champ SIRET ou SIREN propose d'y écrire un numéro aléatoire, fictif mais valide.
 
-![Clic droit sur un champ SIRET, entrée « Générer un SIRET aléatoire »](store/amo/screenshots/1-menu.png)
+![Clic droit sur un champ SIRET, entrée « Générer un SIRET aléatoire »](docs/demo.png)
 
 ## Fonctionnalités
 
@@ -69,7 +69,7 @@ site/                     page de démonstration et politique de confidentialit�
 test/                     tests et fixtures de détection
 scripts/                  build, contrôle de version, icônes, images de la fiche
 store/amo/                textes et images de la fiche addons.mozilla.org
-docs/SPEC.md              spécification
+docs/                     spécification et image du README
 .github/workflows/        vérifications, GitHub Pages, releases
 ```
 

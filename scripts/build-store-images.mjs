@@ -1,8 +1,9 @@
 // Renders the two illustrations used on the addons.mozilla.org listing
-// (1280x800) into store/amo/screenshots/. They depict the extension
+// (1280x800) into store/amo/screenshots/, and copies the first one to
+// docs/demo.png for the README. They depict the extension
 // behaviour; they are drawings, not browser captures.
 // Usage: node scripts/build-store-images.mjs
-import { readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 import { Resvg } from '@resvg/resvg-js';
@@ -99,3 +100,7 @@ for (const [name, svg] of [
   writeFileSync(`${rootDir}store/amo/screenshots/${name}`, png);
   console.log(`store/amo/screenshots/${name}`);
 }
+
+// The README shows the first illustration from docs/.
+copyFileSync(`${rootDir}store/amo/screenshots/1-menu.png`, `${rootDir}docs/demo.png`);
+console.log('docs/demo.png');
