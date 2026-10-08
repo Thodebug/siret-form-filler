@@ -3,7 +3,7 @@
   "name": "__MSG_extName__",
   "short_name": "SIRET Form Filler",
   "description": "__MSG_extDescription__",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "default_locale": "fr",
   "author": "Thodebug",
   "homepage_url": "https://github.com/Thodebug/siret-form-filler",

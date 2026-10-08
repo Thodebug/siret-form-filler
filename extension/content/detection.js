@@ -62,10 +62,8 @@
     'title',
   ];
 
-  const SAMPLES = {
-    siret: ['12345678901234', '123 456 789 01234'],
-    siren: ['123456789', '123 456 789'],
-  };
+  /** Longer `pattern` attributes are ignored. */
+  const MAX_PATTERN_LENGTH = 120;
 
   /**
    * Lowercases, strips accents, splits camelCase and keeps only [a-z0-9]
@@ -290,18 +288,41 @@
    */
 
   /**
+   * Reads the number of digits described by a simple `pattern` attribute,
+   * without executing it: the page controls this text, and running an
+   * arbitrary regular expression could freeze the page (catastrophic
+   * backtracking). Recognized: \d or [0-9], with an optional {n} count,
+   * separated by optional spaces (" ", " ?", " *", "\s?", "\s*", "[ ]?"),
+   * with optional anchors, a (?:...) wrapper and | alternatives. Anything
+   * else is ignored.
    * @param {string} pattern
-   * @returns {RegExp | null}
+   * @returns {Kind | null}
    */
-  function compilePattern(pattern) {
-    for (const flags of ['v', 'u']) {
-      try {
-        return new RegExp(`^(?:${pattern})$`, flags);
-      } catch {
-        // Try the next flag set; HTML uses "v" but older engines only know "u".
-      }
+  function patternKind(pattern) {
+    if (pattern.length > MAX_PATTERN_LENGTH) {
+      return null;
     }
-    return null;
+    let body = pattern.trim().replace(/^\^/, '').replace(/\$$/, '');
+    const wrapped = /^\(\?:(.*)\)$/.exec(body);
+    if (wrapped) {
+      body = wrapped[1];
+    }
+    /** @type {Set<Kind | null>} */
+    const kinds = new Set();
+    for (const alternative of body.split('|')) {
+      const compact = alternative
+        .replace(/\\d|\[0-9\]/g, 'D')
+        .replace(/\\s[?*]|\[ \][?*]| [?*]?/g, '');
+      if (!/^(?:D(?:\{\d{1,2}\})?)+$/.test(compact)) {
+        return null;
+      }
+      let digits = 0;
+      for (const match of compact.matchAll(/D(?:\{(\d{1,2})\})?/g)) {
+        digits += match[1] ? Number(match[1]) : 1;
+      }
+      kinds.add(digits === 14 ? 'siret' : digits === 9 ? 'siren' : null);
+    }
+    return kinds.size === 1 ? [...kinds][0] : null;
   }
 
   /**
@@ -338,17 +359,10 @@
     }
 
     const pattern = field.getAttribute('pattern');
-    const regex = pattern ? compilePattern(pattern) : null;
-    if (regex) {
-      const fitsSiret = SAMPLES.siret.some((sample) => regex.test(sample));
-      const fitsSiren = SAMPLES.siren.some((sample) => regex.test(sample));
-      if (fitsSiret && !fitsSiren) {
-        hints.siret.bonus += BONUS_PATTERN;
-        hints.siren.incompatible = true;
-      } else if (fitsSiren && !fitsSiret) {
-        hints.siren.bonus += BONUS_PATTERN;
-        hints.siret.incompatible = true;
-      }
+    const fromPattern = pattern ? patternKind(pattern) : null;
+    if (fromPattern) {
+      hints[fromPattern].bonus += BONUS_PATTERN;
+      hints[fromPattern === 'siret' ? 'siren' : 'siret'].incompatible = true;
     }
 
     const maskDigits = findMaskDigitCount([field, ...ancestors]);
@@ -452,5 +466,5 @@
   }
 
   const namespace = root.SiretFormFiller || (root.SiretFormFiller = {});
-  namespace.detection = { normalize, scanKeywords, isEligible, detectField };
+  namespace.detection = { normalize, scanKeywords, patternKind, isEligible, detectField };
 })(globalThis);

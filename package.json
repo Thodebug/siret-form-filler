@@ -1,6 +1,6 @@
 {
   "name": "siret-form-filler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Extension Firefox et Chromium : génère un SIRET ou un SIREN fictif mais valide dans les champs de formulaire reconnus.",
   "private": true,
   "license": "MIT",

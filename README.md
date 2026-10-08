@@ -16,7 +16,7 @@ Un clic droit sur un champ SIRET ou SIREN propose d'y écrire un numéro aléato
 - Reconnaissance par id, name, libellé, placeholder, attributs ARIA, longueur, pattern et masque de saisie
 - Champs TVA, NIC et RCS écartés
 - Masques de saisie (PrimeNG...), shadow DOM, iframes et champs ajoutés dynamiquement
-- Valeur prise en compte par React, Angular et Vue, Ctrl+Z annule
+- Valeur prise en compte par React, Angular et Vue, Ctrl+Z annule dans la plupart des champs
 - Fonctionne aussi avec la touche Menu et Maj+F10
 
 ## Installation

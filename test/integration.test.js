@@ -6,6 +6,7 @@ import { describe, it } from 'node:test';
 import vm from 'node:vm';
 import { JSDOM } from 'jsdom';
 import { readProjectFile } from './helpers.js';
+import { isValidSiret } from './validators.js';
 
 const MENU_ID = 'sff-generate';
 const messages = JSON.parse(readProjectFile('extension/_locales/fr/messages.json'));
@@ -199,7 +200,7 @@ describe('Chromium path', () => {
     await env.click({});
     const value = env.input('siret').value;
     assert.match(value, /^\d{14}$/);
-    assert.equal(env.window.SiretFormFiller.numbers.isValidSiret(value), true);
+    assert.equal(isValidSiret(value), true);
   });
 
   it('recreates the entry if the browser lost it', async () => {
@@ -270,7 +271,7 @@ describe('Firefox path', () => {
     await env.click({ targetElementId: 9 });
     const value = env.input('siret').value;
     assert.match(value, /^\d{14}$/);
-    assert.equal(env.window.SiretFormFiller.numbers.isValidSiret(value), true);
+    assert.equal(isValidSiret(value), true);
   });
 
   it('does not register the Chromium listeners', async () => {

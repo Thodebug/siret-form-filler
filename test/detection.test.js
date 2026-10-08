@@ -50,6 +50,42 @@ describe('scanKeywords', () => {
   });
 });
 
+describe('patternKind', () => {
+  it('reads simple SIRET and SIREN patterns', () => {
+    const { sff } = loadPage('');
+    const kind = sff.detection.patternKind;
+    assert.equal(kind('[0-9]{14}'), 'siret');
+    assert.equal(kind(String.raw`^\d{14}$`), 'siret');
+    assert.equal(kind(String.raw`\d{3} ?\d{3} ?\d{3} ?\d{5}`), 'siret');
+    assert.equal(kind(String.raw`(?:\d{14}|\d{3} \d{3} \d{3} \d{5})`), 'siret');
+    assert.equal(kind(String.raw`\d{9}`), 'siren');
+    assert.equal(kind(String.raw`\d{3}\s?\d{3}\s?\d{3}`), 'siren');
+  });
+
+  it('ignores patterns it does not fully understand', () => {
+    const { sff } = loadPage('');
+    const patterns = [
+      '[0-9]*',
+      String.raw`\d{14}|\d{9}`,
+      String.raw`\d{3,5}`,
+      String.raw`FR\d{11}`,
+    ];
+    for (const pattern of patterns) {
+      assert.equal(sff.detection.patternKind(pattern), null, pattern);
+    }
+  });
+
+  it('never runs the page pattern, so a catastrophic one stays instant', () => {
+    const { window, sff } = loadPage(
+      String.raw`<label for="f">SIRET</label><input id="f" pattern="(\d|\d|\d|\d|\d|\d|\d|\d)*x">`,
+    );
+    const started = Date.now();
+    const detection = sff.detection.detectField(window.document.getElementById('f'));
+    assert.ok(Date.now() - started < 200, 'detection took too long');
+    assert.equal(detection.kind, 'siret');
+  });
+});
+
 describe('detectField on fixtures', () => {
   it('matches every expectation of test/fixtures/detection.html', () => {
     const count = checkExpectations(readProjectFile('test/fixtures/detection.html'), 'fixtures');

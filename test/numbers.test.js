@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import vm from 'node:vm';
 import { readProjectFile } from './helpers.js';
+import { isValidSiren, isValidSiret } from './validators.js';
 
 /** Loads numbers.js in an isolated context that only exposes Web Crypto. */
 function loadNumbers() {
@@ -33,22 +34,22 @@ describe('Luhn', () => {
   });
 });
 
-describe('validators', () => {
+describe('test validators', () => {
   it('checks SIREN length and key', () => {
-    assert.equal(numbers.isValidSiren('732829320'), true);
-    assert.equal(numbers.isValidSiren('73282932'), false);
-    assert.equal(numbers.isValidSiren('7328293200'), false);
+    assert.equal(isValidSiren('732829320'), true);
+    assert.equal(isValidSiren('73282932'), false);
+    assert.equal(isValidSiren('7328293200'), false);
   });
 
   it('checks SIRET length and key', () => {
-    assert.equal(numbers.isValidSiret('73282932000074'), true);
-    assert.equal(numbers.isValidSiret('7328293200007'), false);
-    assert.equal(numbers.isValidSiret('73282932000075'), false);
+    assert.equal(isValidSiret('73282932000074'), true);
+    assert.equal(isValidSiret('7328293200007'), false);
+    assert.equal(isValidSiret('73282932000075'), false);
   });
 
   it('applies the La Poste rule (digit sum multiple of 5)', () => {
-    assert.equal(numbers.isValidSiret('35600000000001'), true);
-    assert.equal(numbers.isValidSiret('35600000000002'), false);
+    assert.equal(isValidSiret('35600000000001'), true);
+    assert.equal(isValidSiret('35600000000002'), false);
   });
 });
 
@@ -76,8 +77,8 @@ describe('generateSiret', () => {
     for (let i = 0; i < DRAWS; i++) {
       const siret = numbers.generateSiret();
       assert.match(siret, /^[1-9]\d{13}$/);
-      assert.equal(numbers.isValidSiret(siret), true, siret);
-      assert.equal(numbers.isValidSiren(siret.slice(0, 9)), true, siret);
+      assert.equal(isValidSiret(siret), true, siret);
+      assert.equal(isValidSiren(siret.slice(0, 9)), true, siret);
       assert.notEqual(siret.slice(0, 9), numbers.LA_POSTE_SIREN);
     }
   });

@@ -45,8 +45,8 @@ Analyse d'un seul champ au moment de l'interaction.
   number »), SIREN (« siren », « sirène »), bloquants (« tva », « vat », « intracom », « rcs »,
   « nic » sauf si la même source nomme le SIRET).
 - **Indices de forme** : maxlength 14/17 (+2 SIRET), 9/11 (+2 SIREN), maxlength trop court ou
-  minlength trop long rend le type impossible ; pattern n'acceptant qu'un des deux formats (+3,
-  l'autre impossible) ; masque à 14 ou 9 positions (+3, l'autre impossible) ; placeholder en
+  minlength trop long rend le type impossible ; pattern simple décrivant 14 ou 9 chiffres, lu
+  comme du texte et jamais exécuté (+3, l'autre impossible ; ajusté en 1.0.1) ; masque à 14 ou 9 positions (+3, l'autre impossible) ; placeholder en
   forme de numéro (+2).
 - **Décision** : mot-clé obligatoire, score d'au moins 3, type non impossible ; meilleur score,
   égalité au SIRET ; masqué si les bloquants pèsent autant ou plus. Dans le doute, masqué.

@@ -1,11 +1,10 @@
 /**
- * Generation and validation of French company identifiers (SIREN, SIRET).
+ * Generation of French company identifiers (SIREN, SIRET).
  *
  * SIREN: 9 digits, the last one is a Luhn check digit.
  * SIRET: SIREN followed by a 5 digit establishment number (NIC); the 14 digits
- * pass the Luhn check as a whole. La Poste establishments (SIREN 356000000) are
- * the documented exception: their SIRET is valid when the sum of its digits is
- * a multiple of 5.
+ * pass the Luhn check as a whole. La Poste (SIREN 356000000) follows another
+ * rule for its SIRET, so that SIREN is never generated.
  */
 (function (root) {
   'use strict';
@@ -77,32 +76,6 @@
   }
 
   /**
-   * @param {string} value
-   * @returns {boolean}
-   */
-  function isValidSiren(value) {
-    return /^\d{9}$/.test(value) && isLuhnValid(value);
-  }
-
-  /**
-   * @param {string} value
-   * @returns {boolean}
-   */
-  function isValidSiret(value) {
-    if (!/^\d{14}$/.test(value)) {
-      return false;
-    }
-    if (value.startsWith(LA_POSTE_SIREN)) {
-      let sum = 0;
-      for (const char of value) {
-        sum += Number(char);
-      }
-      return sum % 5 === 0;
-    }
-    return isLuhnValid(value);
-  }
-
-  /**
    * Generates a random valid SIREN. The first digit is never 0 and the
    * La Poste SIREN is never produced.
    * @returns {string}
@@ -131,8 +104,6 @@
     LA_POSTE_SIREN,
     isLuhnValid,
     luhnCheckDigit,
-    isValidSiren,
-    isValidSiret,
     generateSiren,
     generateSiret,
   };

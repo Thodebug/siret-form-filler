@@ -14,14 +14,13 @@ interface SiretFormFillerNamespace {
     LA_POSTE_SIREN: string;
     isLuhnValid(digits: string): boolean;
     luhnCheckDigit(partial: string): string;
-    isValidSiren(value: string): boolean;
-    isValidSiret(value: string): boolean;
     generateSiren(): string;
     generateSiret(): string;
   };
   detection?: {
     normalize(text: string): string;
     scanKeywords(text: string): { siret: boolean; siren: boolean; blocked: boolean };
+    patternKind(pattern: string): SffKind | null;
     isEligible(element: Element | null | undefined): element is HTMLInputElement;
     detectField(element: Element | null | undefined): SffDetection;
   };

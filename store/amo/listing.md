@@ -43,7 +43,7 @@ Les masques de saisie (PrimeNG...), le shadow DOM et les iframes sont pris en ch
 **Remplissage**
 
 Le numéro est écrit comme une saisie : React, Angular, Vue et les masques de saisie le voient,
-et Ctrl+Z annule le remplissage.
+et Ctrl+Z annule le remplissage dans la plupart des champs.
 
 **Confidentialité**
 
@@ -76,8 +76,10 @@ the files of the repository's `extension/` folder. The packaging script
 
 `<all_urls>` content script: needed to decide, on any site, whether the right-clicked field
 expects a SIRET or SIREN number, so the menu entry is shown only on those fields. The script
-reads the attributes and labels of that single field, never the page content, and sends
-nothing over the network. The `menus` permission is used for the entry and for
+reads the attributes and labels of the right-clicked field only, the text of elements it
+references through aria-labelledby or aria-describedby, and up to 100 characters of the text
+next to it. Nothing is stored or sent over the network. The page `pattern` attribute is read
+as text and never executed. The `menus` permission is used for the entry and for
 `menus.getTargetElement`.
 
 Test page: https://thodebug.github.io/siret-form-filler/
