@@ -34,7 +34,7 @@
       return { text: '', ok: true };
     }
     const ok = isLuhnValid(digits) && isLuhnValid(digits.slice(0, 9));
-    return { text: ok ? '✓ clé valide' : '✗ clé invalide', ok };
+    return { text: ok ? '\u2713' : '\u2717', ok };
   }
 
   /**
@@ -49,6 +49,7 @@
     }
     const { text, ok } = verdict(input.value);
     status.textContent = text;
+    status.title = text ? (ok ? 'Clé de contrôle valide' : 'Clé de contrôle invalide') : '';
     status.classList.toggle('bad', !ok);
   }
 
@@ -163,7 +164,7 @@
       const root = this.attachShadow({ mode });
       const style = document.createElement('style');
       style.textContent =
-        'label{display:block;font-weight:600;margin-bottom:4px;padding-right:86px}' +
+        'label{display:block;font-weight:600;margin-bottom:4px;padding-right:40px}' +
         'input{box-sizing:border-box;width:100%;padding:7px 10px;font:inherit;' +
         'border:1px solid #c7c9d1;border-radius:8px}' +
         'input:focus{outline:2px solid #4338ca;outline-offset:1px}';
