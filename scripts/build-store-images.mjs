@@ -55,14 +55,19 @@ function frame(caption, content) {
 </svg>`;
 }
 
-const menuX = 470;
-const menuY = 440;
+// The right click happens inside the field and the menu opens there; the
+// pointer is then drawn on the entry being chosen, which is highlighted.
+const pointerX = 440;
+const pointerY = 472;
+const menuX = pointerX + 2;
+const menuY = pointerY + 2;
+const ITEM_HEIGHT = 40;
 const menuItems = ['Annuler', 'Couper', 'Copier', 'Coller', 'Tout sélectionner'];
-let menu = `<rect x="${menuX}" y="${menuY}" width="400" height="${menuItems.length * 44 + 80}" rx="10" fill="#fff" stroke="#C7C9D1" stroke-width="1.5"/>`;
+let menu = `<rect x="${menuX}" y="${menuY}" width="400" height="${menuItems.length * ITEM_HEIGHT + 76}" rx="10" fill="#fff" stroke="#C7C9D1" stroke-width="1.5"/>`;
 menuItems.forEach((item, index) => {
-  menu += `<text x="${menuX + 24}" y="${menuY + 34 + index * 44}" font-family="${FONT}" font-size="20" fill="#3B3E4F">${item}</text>`;
+  menu += `<text x="${menuX + 24}" y="${menuY + 32 + index * ITEM_HEIGHT}" font-family="${FONT}" font-size="20" fill="#3B3E4F">${item}</text>`;
 });
-const highlightY = menuY + menuItems.length * 44 + 18;
+const highlightY = menuY + menuItems.length * ITEM_HEIGHT + 16;
 menu += `<line x1="${menuX + 12}" y1="${highlightY - 8}" x2="${menuX + 388}" y2="${highlightY - 8}" stroke="#E3E5EC" stroke-width="1.5"/>
   <rect x="${menuX + 8}" y="${highlightY}" width="384" height="50" rx="8" fill="${INDIGO}"/>
   <g transform="translate(${menuX + 20} ${highlightY + 11}) scale(0.22)">${icon.replace(/<svg[^>]*>/, '').replace('</svg>', '')}</g>
@@ -73,8 +78,8 @@ const first = frame(
   field(120, 320, 'Raison sociale', 'Atelier Dupont') +
     field(120, 430, 'N° SIRET', '', { focused: true }) +
     field(120, 540, 'Ville', 'Lyon') +
-    `<path d="M${menuX - 6} ${menuY - 18} l0 26 l7 -6 l6 12 l5 -3 l-6 -11 l9 -1 Z" fill="#1D1F2B" stroke="#fff" stroke-width="1.5"/>` +
-    menu,
+    menu +
+    `<path d="M${menuX + 330} ${highlightY + 14} l0 26 l7 -6 l6 12 l5 -3 l-6 -11 l9 -1 Z" fill="#1D1F2B" stroke="#fff" stroke-width="1.5"/>`,
 );
 
 const second = frame(
