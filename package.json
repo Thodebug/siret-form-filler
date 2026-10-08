@@ -1,0 +1,44 @@
+{
+  "name": "siret-form-filler",
+  "version": "1.0.0",
+  "description": "Extension Firefox et Chromium : génère un SIRET ou un SIREN fictif mais valide dans les champs de formulaire reconnus.",
+  "private": true,
+  "license": "MIT",
+  "author": "Thodebug",
+  "homepage": "https://github.com/Thodebug/siret-form-filler",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thodebug/siret-form-filler.git"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --test \"test/*.test.js\"",
+    "build": "node scripts/package.mjs",
+    "lint:ext": "web-ext lint --source-dir dist/firefox --warnings-as-errors",
+    "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run lint:ext",
+    "icons": "node scripts/build-icons.mjs",
+    "check-version": "node scripts/check-version.mjs",
+    "start:firefox": "npm run build && web-ext run --source-dir dist/firefox",
+    "start:chromium": "npm run build && web-ext run --target chromium --source-dir dist/chromium",
+    "store-images": "node scripts/build-store-images.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@resvg/resvg-js": "^2.6.2",
+    "eslint": "^10.12.0",
+    "globals": "^17.13.0",
+    "jsdom": "^27.4.0",
+    "prettier": "^3.9.9",
+    "typescript": "~5.9",
+    "web-ext": "^10.7.0"
+  },
+  "overrides": {
+    "shell-quote": "^1.12.0"
+  }
+}

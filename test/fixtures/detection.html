@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Detection fixtures</title>
+  </head>
+  <body>
+    <!--
+      Each field carries data-expected: 14 (SIRET entry), 9 (SIREN entry) or
+      0 (no entry). Descriptions live in comments because comments are not
+      part of textContent and therefore never influence detection.
+    -->
+    <form>
+      <!-- SIRET: label for, camelCase name -->
+      <div class="row">
+        <label for="s1">N° SIRET</label>
+        <input id="s1" name="companySiret" data-expected="14" />
+      </div>
+
+      <!-- SIRET: wrapping label -->
+      <div class="row">
+        <label>SIRET de l'établissement <input name="f2" type="text" data-expected="14" /></label>
+      </div>
+
+      <!-- SIRET: name only -->
+      <div class="row"><input name="siret" data-expected="14" /></div>
+
+      <!-- SIRET: aria-label -->
+      <div class="row"><input aria-label="Numéro SIRET" data-expected="14" /></div>
+
+      <!-- SIRET: Angular formcontrolname + maxlength -->
+      <div class="row">
+        <input formcontrolname="siretNumber" maxlength="14" data-expected="14" />
+      </div>
+
+      <!-- SIRET: aria-labelledby -->
+      <div class="row">
+        <span id="l6">Siret</span>
+        <input aria-labelledby="l6" data-expected="14" />
+      </div>
+
+      <!-- SIRET: table layout, label in the neighbouring cell -->
+      <table>
+        <tr>
+          <td>SIRET</td>
+          <td><input name="f7" data-expected="14" /></td>
+        </tr>
+      </table>
+
+      <!-- SIRET: PrimeNG InputMask, id and mask on the host element -->
+      <div class="field">
+        <label for="siretHost">SIRET</label>
+        <p-inputmask id="siretHost" mask="999 999 999 99999">
+          <input class="p-inputtext p-component" type="text" data-expected="14" />
+        </p-inputmask>
+      </div>
+
+      <!-- SIRET: English label -->
+      <div class="row">
+        <label for="s9">Company SIRET number</label>
+        <input id="s9" data-expected="14" />
+      </div>
+
+      <!-- SIRET: "numero d'etablissement" with spaced length -->
+      <div class="row">
+        <label for="s10">Numéro d'établissement</label>
+        <input id="s10" maxlength="17" data-expected="14" />
+      </div>
+
+      <!-- SIRET: common misspelling -->
+      <div class="row"><input name="sirret" data-expected="14" /></div>
+
+      <!-- SIRET: tel input -->
+      <div class="row"><input type="tel" name="siret_client" data-expected="14" /></div>
+
+      <!-- SIRET: number input -->
+      <div class="row"><input type="number" id="siretNum" data-expected="14" /></div>
+
+      <!-- SIRET: label naming both, no length clue, tie goes to SIRET -->
+      <div class="row">
+        <label for="s14">SIRET / SIREN</label>
+        <input id="s14" data-expected="14" />
+      </div>
+
+      <!-- SIRET: label describing its parts -->
+      <div class="row">
+        <label for="s15">SIRET (SIREN + NIC)</label>
+        <input id="s15" data-expected="14" />
+      </div>
+
+      <!-- SIRET: weak keyword (data-testid) plus length -->
+      <div class="row"><input data-testid="siret-input" maxlength="14" data-expected="14" /></div>
+
+      <!-- SIRET: pattern -->
+      <div class="row"><input name="siret" pattern="[0-9]{14}" data-expected="14" /></div>
+
+      <!-- SIRET: placeholder shaped like a number -->
+      <div class="row">
+        <label for="s18">Siret</label>
+        <input id="s18" placeholder="123 456 789 00012" data-expected="14" />
+      </div>
+
+      <!-- SIRET: search input, accents and uppercase -->
+      <div class="row">
+        <label for="s19">NUMÉRO SIRET</label>
+        <input id="s19" type="search" data-expected="14" />
+      </div>
+
+      <!-- SIREN: label + maxlength -->
+      <div class="row">
+        <label for="n1">SIREN</label>
+        <input id="n1" maxlength="9" data-expected="9" />
+      </div>
+
+      <!-- SIREN: name only -->
+      <div class="row"><input name="siren" data-expected="9" /></div>
+
+      <!-- SIREN: placeholder shape -->
+      <div class="row">
+        <label for="n3">N° SIREN</label>
+        <input id="n3" placeholder="123 456 789" data-expected="9" />
+      </div>
+
+      <!-- SIREN: label naming both, but only 9 characters fit -->
+      <div class="row">
+        <label for="n4">SIRET/SIREN</label>
+        <input id="n4" maxlength="9" data-expected="9" />
+      </div>
+
+      <!-- SIREN: formcontrolname -->
+      <div class="row"><input formcontrolname="numeroSiren" data-expected="9" /></div>
+
+      <!-- Trap: VAT number -->
+      <div class="row">
+        <label for="t1">N° TVA intracommunautaire</label>
+        <input id="t1" placeholder="FR12345678901" data-expected="0" />
+      </div>
+
+      <!-- Trap: VAT label that mentions the SIREN -->
+      <div class="row">
+        <label for="t2">TVA (FR + clé + SIREN)</label>
+        <input id="t2" data-expected="0" />
+      </div>
+
+      <!-- Trap: NIC alone -->
+      <div class="row">
+        <label for="t3">NIC</label>
+        <input id="t3" maxlength="5" data-expected="0" />
+      </div>
+
+      <!-- Trap: section title shared by several fields -->
+      <fieldset>
+        <legend>Identification SIRET</legend>
+        <div class="row">
+          <label for="t4">Raison sociale</label>
+          <input id="t4" data-expected="0" />
+        </div>
+        <div class="row">
+          <label for="t5">Ville</label>
+          <input id="t5" data-expected="0" />
+        </div>
+      </fieldset>
+
+      <!-- Trap: no clue at all -->
+      <div class="row"><input name="field28" data-expected="0" /></div>
+
+      <!-- Trap: right length, no keyword -->
+      <div class="row"><input name="code" maxlength="14" data-expected="0" /></div>
+
+      <!-- Trap: read-only -->
+      <div class="row"><input name="siret" readonly data-expected="0" /></div>
+
+      <!-- Trap: disabled -->
+      <div class="row"><input name="siret" disabled data-expected="0" /></div>
+
+      <!-- Trap: inside a disabled fieldset -->
+      <fieldset disabled>
+        <input name="siret" data-expected="0" />
+      </fieldset>
+
+      <!-- Trap: textarea -->
+      <div class="row"><textarea name="siret" data-expected="0"></textarea></div>
+
+      <!-- Trap: contenteditable -->
+      <div class="row"><div contenteditable="true" id="siretEditable" data-expected="0"></div></div>
+
+      <!-- Trap: RCS -->
+      <div class="row">
+        <label for="t13">RCS</label>
+        <input id="t13" data-expected="0" />
+      </div>
+
+      <!-- Trap: SIRET keyword but only 9 characters fit -->
+      <div class="row">
+        <label for="t14">SIRET</label>
+        <input id="t14" maxlength="9" data-expected="0" />
+      </div>
+
+      <!-- Trap: email input -->
+      <div class="row"><input type="email" name="siret" data-expected="0" /></div>
+
+      <!-- Trap: password input -->
+      <div class="row"><input type="password" name="siret" data-expected="0" /></div>
+
+      <!-- Trap: keyword only in a CSS class (weak clue) -->
+      <div class="row"><input class="siret" data-expected="0" /></div>
+
+      <!-- Trap: English VAT -->
+      <div class="row">
+        <label for="t18">VAT number</label>
+        <input id="t18" data-expected="0" />
+      </div>
+
+      <!-- Trap: word containing "vat" must not block, but nothing else matches -->
+      <div class="row">
+        <label for="t19">Private reference</label>
+        <input id="t19" data-expected="0" />
+      </div>
+
+      <!-- Trap: hidden input -->
+      <input type="hidden" name="siret" data-expected="0" />
+    </form>
+  </body>
+</html>

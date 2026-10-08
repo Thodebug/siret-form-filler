@@ -1,0 +1,18 @@
+{
+  "extName": {
+    "message": "SIRET Form Filler",
+    "description": "Nom de l'extension."
+  },
+  "extDescription": {
+    "message": "Clic droit sur un champ SIRET ou SIREN : insère un numéro fictif mais valide, pour tester vos formulaires.",
+    "description": "Description affichée dans le gestionnaire d'extensions."
+  },
+  "menuSiret": {
+    "message": "Générer un SIRET aléatoire",
+    "description": "Entrée du menu contextuel sur un champ SIRET."
+  },
+  "menuSiren": {
+    "message": "Générer un SIREN aléatoire",
+    "description": "Entrée du menu contextuel sur un champ SIREN."
+  }
+}
