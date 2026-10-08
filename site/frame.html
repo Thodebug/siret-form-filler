@@ -3,12 +3,30 @@
   <head>
     <meta charset="utf-8" />
     <title>Cadre de démonstration</title>
-    <link rel="stylesheet" href="demo.css" />
+    <style>
+      body {
+        margin: 0;
+        font:
+          14px system-ui,
+          sans-serif;
+      }
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      input {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 6px 8px;
+        font: inherit;
+        border: 1px solid #c7c9d1;
+        border-radius: 6px;
+      }
+    </style>
   </head>
-  <body style="background: #ffffff; padding: 12px">
-    <div class="field">
-      <label for="frameSiret">N° SIRET</label>
-      <input id="frameSiret" name="frameSiret" />
-    </div>
+  <body>
+    <label for="frameSiret">N° SIRET</label>
+    <input id="frameSiret" name="frameSiret" />
   </body>
 </html>

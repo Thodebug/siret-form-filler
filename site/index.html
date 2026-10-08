@@ -6,309 +6,330 @@
     <title>SIRET Form Filler : page de démonstration</title>
     <meta
       name="description"
-      content="Champs de test pour l'extension SIRET Form Filler : vrais positifs, pièges et cas avancés."
+      content="Champs de test pour l'extension SIRET Form Filler : champs reconnus, pièges et cas avancés."
     />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="demo.css" />
   </head>
   <body>
     <header class="top">
-      <img src="favicon.svg" alt="" width="48" height="48" />
-      <div>
-        <h1>SIRET Form Filler</h1>
-        <p>Page de démonstration de l'extension</p>
-      </div>
+      <img src="favicon.svg" alt="" width="32" height="32" />
+      <h1>SIRET Form Filler</h1>
+      <span class="subtitle">Page de démonstration</span>
       <nav>
         <a href="https://github.com/Thodebug/siret-form-filler">Code source</a>
         <a href="confidentialite.html">Confidentialité</a>
       </nav>
     </header>
 
-    <main>
-      <section class="intro">
-        <p>
-          Installez l'extension, puis faites un clic droit dans les champs ci-dessous. L'entrée «
-          Générer un SIRET aléatoire » (ou SIREN) n'apparaît que sur les champs reconnus. La touche
-          Menu et Maj+F10 fonctionnent aussi.
-        </p>
-        <p>
-          Chaque cas indique ce qui est attendu. Une fois un champ rempli, la ligne d'état vérifie
-          la clé de contrôle et le journal à droite liste les événements reçus par la page, comme le
-          ferait React, Angular ou Vue. Ctrl+Z annule le remplissage.
-        </p>
+    <main class="board">
+      <section class="panel recognized">
+        <h2>Champs reconnus <small>l'entrée doit apparaître au clic droit</small></h2>
+        <form class="recognized-form" onsubmit="return false;">
+          <fieldset>
+            <legend>SIRET</legend>
+
+            <div class="f">
+              <label for="d1">N° SIRET</label>
+              <input id="d1" name="siret" data-expected="14" />
+              <template>
+                <p>
+                  Attendu : SIRET. Libellé relié par <code>for</code> et
+                  <code>name</code> explicite.
+                </p>
+                <pre><code>&lt;label for="d1"&gt;N° SIRET&lt;/label&gt;
+&lt;input id="d1" name="siret"&gt;</code></pre>
+              </template>
+            </div>
+
+            <div class="f">
+              <label>SIRET de l'établissement <input name="f2" data-expected="14" /></label>
+              <template>
+                <p>Attendu : SIRET. Le libellé englobe le champ, sans attribut <code>for</code>.</p>
+                <pre><code>&lt;label&gt;SIRET de l'établissement &lt;input name="f2"&gt;&lt;/label&gt;</code></pre>
+              </template>
+            </div>
+
+            <div class="f">
+              <span class="caption">Sans libellé visible</span>
+              <input aria-label="Numéro SIRET" placeholder="123 456 789 00012" data-expected="14" />
+              <template>
+                <p>
+                  Attendu : SIRET. Aucun libellé visible : <code>aria-label</code> et un placeholder
+                  en forme de numéro.
+                </p>
+                <pre><code>&lt;input aria-label="Numéro SIRET" placeholder="123 456 789 00012"&gt;</code></pre>
+              </template>
+            </div>
+
+            <div class="f">
+              <label for="d4">Identifiant (Angular)</label>
+              <input id="d4" formcontrolname="siretNumber" maxlength="14" data-expected="14" />
+              <template>
+                <p>
+                  Attendu : SIRET. Le libellé ne dit rien : le champ est reconnu par
+                  <code>formcontrolname</code> et <code>maxlength</code>.
+                </p>
+                <pre><code>&lt;input formcontrolname="siretNumber" maxlength="14"&gt;</code></pre>
+              </template>
+            </div>
+
+            <div class="f">
+              <table class="cells">
+                <tr>
+                  <td>SIRET</td>
+                  <td><input name="f5" data-expected="14" /></td>
+                </tr>
+              </table>
+              <template>
+                <p>Attendu : SIRET. Le libellé est dans la cellule voisine du tableau.</p>
+                <pre><code>&lt;td&gt;SIRET&lt;/td&gt;
+&lt;td&gt;&lt;input name="f5"&gt;&lt;/td&gt;</code></pre>
+              </template>
+            </div>
+
+            <div class="f">
+              <label for="maskedHost">SIRET (masque)</label>
+              <p-inputmask id="maskedHost" mask="999 999 999 99999">
+                <input class="p-inputtext" placeholder="___ ___ ___ _____" data-expected="14" />
+              </p-inputmask>
+              <template>
+                <p>
+                  Attendu : SIRET. Masque de saisie façon PrimeNG : l'id et le masque sont sur
+                  l'élément hôte, pas sur l'input.
+                </p>
+                <pre><code>&lt;p-inputmask id="maskedHost" mask="999 999 999 99999"&gt;
+  &lt;input class="p-inputtext"&gt;
+&lt;/p-inputmask&gt;</code></pre>
+              </template>
+            </div>
+
+            <div class="f">
+              <label for="d7">SIRET (numérique)</label>
+              <input id="d7" type="number" data-expected="14" />
+              <template>
+                <p>Attendu : SIRET. Champ de type number.</p>
+                <pre><code>&lt;input id="d7" type="number"&gt;</code></pre>
+              </template>
+            </div>
+
+            <div class="f">
+              <label for="d8">Numéro d'établissement</label>
+              <input id="d8" maxlength="17" data-expected="14" />
+              <template>
+                <p>
+                  Attendu : SIRET. Autre nom du SIRET, longueur prévue pour 14 chiffres et 3
+                  espaces.
+                </p>
+                <pre><code>&lt;input id="d8" maxlength="17"&gt;</code></pre>
+              </template>
+            </div>
+
+            <div class="f">
+              <label for="d9">Company SIRET number</label>
+              <input id="d9" type="tel" data-expected="14" />
+              <template>
+                <p>Attendu : SIRET. Libellé en anglais, champ de type tel.</p>
+                <pre><code>&lt;input id="d9" type="tel"&gt;</code></pre>
+              </template>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>SIREN</legend>
+
+            <div class="f">
+              <label for="n1">SIREN</label>
+              <input id="n1" maxlength="9" data-expected="9" />
+              <template>
+                <p>Attendu : SIREN, 9 chiffres.</p>
+                <pre><code>&lt;input id="n1" maxlength="9"&gt;</code></pre>
+              </template>
+            </div>
+
+            <div class="f">
+              <label for="n2">N° SIREN</label>
+              <input id="n2" placeholder="123 456 789" data-expected="9" />
+              <template>
+                <p>Attendu : SIREN. Placeholder en forme de numéro à 9 chiffres.</p>
+                <pre><code>&lt;input id="n2" placeholder="123 456 789"&gt;</code></pre>
+              </template>
+            </div>
+
+            <div class="f">
+              <label for="n3">SIRET / SIREN</label>
+              <input id="n3" maxlength="9" data-expected="9" />
+              <template>
+                <p>
+                  Attendu : SIREN. Le libellé cite les deux, mais seuls 9 caractères tiennent dans
+                  le champ.
+                </p>
+                <pre><code>&lt;input id="n3" maxlength="9"&gt;</code></pre>
+              </template>
+            </div>
+          </fieldset>
+        </form>
       </section>
 
-      <div class="layout">
-        <div class="cases">
-          <section>
-            <h2>Champs SIRET reconnus</h2>
-            <div class="grid">
-              <article class="case">
-                <div class="field">
-                  <label for="d1">N° SIRET</label>
-                  <input id="d1" name="siret" data-expected="14" />
-                </div>
-                <p class="note">Attendu : entrée 14 chiffres</p>
-                <output class="status"></output>
-              </article>
+      <section class="panel traps">
+        <h2>Pièges <small>aucune entrée ne doit apparaître</small></h2>
+        <div class="grid">
+          <div class="f">
+            <label for="t1">N° TVA intracommunautaire</label>
+            <input id="t1" placeholder="FR12345678901" data-expected="0" />
+            <template>
+              <p>Numéro de TVA : il contient le SIREN mais n'est pas un SIRET.</p>
+              <pre><code>&lt;input id="t1" placeholder="FR12345678901"&gt;</code></pre>
+            </template>
+          </div>
 
-              <article class="case">
-                <div class="field">
-                  <label>SIRET de l'établissement <input name="f2" data-expected="14" /></label>
-                </div>
-                <p class="note">Attendu : entrée 14 chiffres (libellé englobant)</p>
-                <output class="status"></output>
-              </article>
+          <div class="f">
+            <label for="t2">NIC</label>
+            <input id="t2" maxlength="5" data-expected="0" />
+            <template>
+              <p>Le NIC seul : les 5 derniers chiffres du SIRET.</p>
+              <pre><code>&lt;input id="t2" maxlength="5"&gt;</code></pre>
+            </template>
+          </div>
 
-              <article class="case">
-                <div class="field">
-                  <input
-                    aria-label="Numéro SIRET"
-                    placeholder="123 456 789 00012"
-                    data-expected="14"
-                  />
-                </div>
-                <p class="note">Attendu : entrée 14 chiffres (aria-label, sans libellé visible)</p>
-                <output class="status"></output>
-              </article>
+          <div class="f">
+            <label for="t3">RCS</label>
+            <input id="t3" data-expected="0" />
+            <template>
+              <p>Numéro RCS (registre du commerce), écarté.</p>
+            </template>
+          </div>
 
-              <article class="case">
-                <div class="field">
-                  <label for="d4">Siret</label>
-                  <input id="d4" formcontrolname="siretNumber" maxlength="14" data-expected="14" />
-                </div>
-                <p class="note">Attendu : entrée 14 chiffres (style Angular, maxlength 14)</p>
-                <output class="status"></output>
-              </article>
+          <div class="f">
+            <label for="t4">Code client</label>
+            <input id="t4" maxlength="14" data-expected="0" />
+            <template>
+              <p>Bonne longueur mais aucun mot-clé : la longueur seule ne suffit jamais.</p>
+              <pre><code>&lt;input id="t4" maxlength="14"&gt;</code></pre>
+            </template>
+          </div>
 
-              <article class="case">
-                <table class="field">
-                  <tr>
-                    <td>SIRET</td>
-                    <td><input name="f5" data-expected="14" /></td>
-                  </tr>
-                </table>
-                <p class="note">Attendu : entrée 14 chiffres (libellé dans la cellule voisine)</p>
-                <output class="status"></output>
-              </article>
+          <div class="f">
+            <span class="caption">Sans aucun indice</span>
+            <input name="reference" data-expected="0" />
+            <template>
+              <p>Rien n'indique ce que le champ attend.</p>
+              <pre><code>&lt;input name="reference"&gt;</code></pre>
+            </template>
+          </div>
 
-              <article class="case">
-                <div class="field">
-                  <label for="maskedHost">SIRET</label>
-                  <p-inputmask id="maskedHost" mask="999 999 999 99999">
-                    <input class="p-inputtext" placeholder="___ ___ ___ _____" data-expected="14" />
-                  </p-inputmask>
-                </div>
-                <p class="note">
-                  Attendu : entrée 14 chiffres (masque façon PrimeNG, id sur l'élément hôte)
-                </p>
-                <output class="status"></output>
-              </article>
+          <div class="f">
+            <label for="t6">SIRET (lecture seule)</label>
+            <input id="t6" value="73282932000074" readonly data-expected="0" />
+            <template>
+              <p>Champ en lecture seule : il ne peut pas être rempli.</p>
+              <pre><code>&lt;input id="t6" readonly&gt;</code></pre>
+            </template>
+          </div>
 
-              <article class="case">
-                <div class="field">
-                  <label for="d7">SIRET (champ numérique)</label>
-                  <input id="d7" type="number" data-expected="14" />
-                </div>
-                <p class="note">Attendu : entrée 14 chiffres (type number)</p>
-                <output class="status"></output>
-              </article>
+          <div class="f">
+            <label for="t7">SIRET (désactivé)</label>
+            <input id="t7" disabled data-expected="0" />
+            <template>
+              <p>Champ désactivé : il ne peut pas être rempli.</p>
+              <pre><code>&lt;input id="t7" disabled&gt;</code></pre>
+            </template>
+          </div>
 
-              <article class="case">
-                <div class="field">
-                  <label for="d8">Numéro d'établissement</label>
-                  <input id="d8" maxlength="17" data-expected="14" />
-                </div>
-                <p class="note">Attendu : entrée 14 chiffres (maxlength 17)</p>
-                <output class="status"></output>
-              </article>
+          <div class="f">
+            <label for="t8">SIRET (zone de texte)</label>
+            <textarea id="t8" rows="1" data-expected="0"></textarea>
+            <template>
+              <p>Les zones de texte multilignes ne sont pas prises en charge.</p>
+              <pre><code>&lt;textarea id="t8"&gt;&lt;/textarea&gt;</code></pre>
+            </template>
+          </div>
 
-              <article class="case">
-                <div class="field">
-                  <label for="d9">Company SIRET number</label>
-                  <input id="d9" type="tel" data-expected="14" />
-                </div>
-                <p class="note">Attendu : entrée 14 chiffres (libellé anglais, type tel)</p>
-                <output class="status"></output>
-              </article>
-            </div>
-          </section>
-
-          <section>
-            <h2>Champs SIREN reconnus</h2>
-            <div class="grid">
-              <article class="case">
-                <div class="field">
-                  <label for="n1">SIREN</label>
-                  <input id="n1" maxlength="9" data-expected="9" />
-                </div>
-                <p class="note">Attendu : entrée 9 chiffres</p>
-                <output class="status"></output>
-              </article>
-
-              <article class="case">
-                <div class="field">
-                  <label for="n2">N° SIREN</label>
-                  <input id="n2" placeholder="123 456 789" data-expected="9" />
-                </div>
-                <p class="note">Attendu : entrée 9 chiffres (placeholder)</p>
-                <output class="status"></output>
-              </article>
-
-              <article class="case">
-                <div class="field">
-                  <label for="n3">SIRET / SIREN</label>
-                  <input id="n3" maxlength="9" data-expected="9" />
-                </div>
-                <p class="note">Attendu : entrée 9 chiffres (seuls 9 caractères tiennent)</p>
-                <output class="status"></output>
-              </article>
-            </div>
-          </section>
-
-          <section>
-            <h2>Pièges : aucune entrée attendue</h2>
-            <div class="grid">
-              <article class="case">
-                <div class="field">
-                  <label for="t1">N° TVA intracommunautaire</label>
-                  <input id="t1" placeholder="FR12345678901" data-expected="0" />
-                </div>
-                <p class="note">Attendu : aucune entrée</p>
-              </article>
-
-              <article class="case">
-                <div class="field">
-                  <label for="t2">NIC</label>
-                  <input id="t2" maxlength="5" data-expected="0" />
-                </div>
-                <p class="note">Attendu : aucune entrée</p>
-              </article>
-
-              <article class="case">
-                <div class="field">
-                  <label for="t3">RCS</label>
-                  <input id="t3" data-expected="0" />
-                </div>
-                <p class="note">Attendu : aucune entrée</p>
-              </article>
-
-              <article class="case">
-                <div class="field">
-                  <label for="t4">Code client</label>
-                  <input id="t4" maxlength="14" data-expected="0" />
-                </div>
-                <p class="note">Attendu : aucune entrée (bonne longueur, aucun mot-clé)</p>
-              </article>
-
-              <article class="case">
-                <div class="field">
-                  <input name="reference" data-expected="0" />
-                </div>
-                <p class="note">Attendu : aucune entrée (aucun indice)</p>
-              </article>
-
-              <article class="case">
-                <div class="field">
-                  <label for="t6">SIRET (lecture seule)</label>
-                  <input id="t6" value="73282932000074" readonly data-expected="0" />
-                </div>
-                <p class="note">Attendu : aucune entrée</p>
-              </article>
-
-              <article class="case">
-                <div class="field">
-                  <label for="t7">SIRET (désactivé)</label>
-                  <input id="t7" disabled data-expected="0" />
-                </div>
-                <p class="note">Attendu : aucune entrée</p>
-              </article>
-
-              <article class="case">
-                <div class="field">
-                  <label for="t8">SIRET (zone de texte)</label>
-                  <textarea id="t8" rows="1" data-expected="0"></textarea>
-                </div>
-                <p class="note">Attendu : aucune entrée (textarea non pris en charge)</p>
-              </article>
-
-              <article class="case wide">
-                <fieldset class="field">
-                  <legend>Identification SIRET</legend>
-                  <label for="t9">Raison sociale</label>
-                  <input id="t9" data-expected="0" />
-                  <label for="t10">Ville</label>
-                  <input id="t10" data-expected="0" />
-                </fieldset>
-                <p class="note">
-                  Attendu : aucune entrée (le titre de section concerne plusieurs champs)
-                </p>
-              </article>
-            </div>
-          </section>
-
-          <section>
-            <h2>Cas avancés</h2>
-            <div class="grid">
-              <article class="case">
-                <div class="field">
-                  <sff-demo-field mode="open" label="N° SIRET" name="shadowOpen"></sff-demo-field>
-                </div>
-                <p class="note">Attendu : entrée 14 chiffres (shadow DOM ouvert)</p>
-                <output class="status"></output>
-              </article>
-
-              <article class="case">
-                <div class="field">
-                  <sff-demo-field mode="closed" label="SIREN" name="shadowClosed"></sff-demo-field>
-                </div>
-                <p class="note">Attendu : entrée 9 chiffres (shadow DOM fermé)</p>
-                <output class="status"></output>
-              </article>
-
-              <article class="case">
-                <iframe src="frame.html" title="Cadre de même origine" class="frame"></iframe>
-                <p class="note">Attendu : entrée 14 chiffres (iframe de même origine)</p>
-              </article>
-
-              <article class="case">
-                <iframe
-                  sandbox=""
-                  title="Cadre sans origine"
-                  class="frame"
-                  srcdoc="<!doctype html><meta charset='utf-8'><body style='font-family:system-ui,sans-serif;margin:12px'><label for='x'>N° SIREN</label><br><input id='x' style='margin-top:6px;padding:6px;font-size:15px'></body>"
-                ></iframe>
-                <p class="note">
-                  Attendu : entrée 9 chiffres (iframe sandbox, origine opaque donc différente de la
-                  page)
-                </p>
-              </article>
-
-              <article class="case">
-                <div id="dynamicSlot" class="field">
-                  <button type="button" id="addField">Ajouter un champ</button>
-                </div>
-                <p class="note">Attendu : entrée 14 chiffres sur le champ ajouté après coup</p>
-                <output class="status"></output>
-              </article>
-            </div>
-          </section>
+          <div class="f">
+            <fieldset class="section">
+              <legend>Identification SIRET</legend>
+              <label
+                >Raison sociale
+                <input id="t9" data-expected="0" />
+              </label>
+              <label
+                >Ville
+                <input id="t10" data-expected="0" />
+              </label>
+            </fieldset>
+            <template>
+              <p>
+                Le titre de section concerne plusieurs champs : il n'est pris pour le libellé
+                d'aucun.
+              </p>
+              <pre><code>&lt;fieldset&gt;
+  &lt;legend&gt;Identification SIRET&lt;/legend&gt;
+  ...
+&lt;/fieldset&gt;</code></pre>
+            </template>
+          </div>
         </div>
+      </section>
 
-        <aside class="log">
-          <h2>Journal des événements</h2>
-          <button type="button" id="clearLog">Vider</button>
-          <ol id="eventLog"></ol>
-        </aside>
-      </div>
+      <section class="panel advanced">
+        <h2>Cas avancés <small>l'entrée doit apparaître</small></h2>
+        <div class="grid">
+          <div class="f">
+            <sff-demo-field mode="open" label="N° SIRET" name="shadowOpen"></sff-demo-field>
+            <template>
+              <p>Attendu : SIRET. Champ dans un shadow DOM ouvert.</p>
+              <pre><code>attachShadow({ mode: 'open' })</code></pre>
+            </template>
+          </div>
+
+          <div class="f">
+            <sff-demo-field mode="closed" label="SIREN" name="shadowClosed"></sff-demo-field>
+            <template>
+              <p>
+                Attendu : SIREN. Champ dans un shadow DOM fermé, invisible pour les scripts de la
+                page.
+              </p>
+              <pre><code>attachShadow({ mode: 'closed' })</code></pre>
+            </template>
+          </div>
+
+          <div class="f">
+            <iframe src="frame.html" title="Cadre de même origine" class="frame"></iframe>
+            <template>
+              <p>Attendu : SIRET. Champ dans une iframe de même origine.</p>
+              <pre><code>&lt;iframe src="frame.html"&gt;</code></pre>
+            </template>
+          </div>
+
+          <div class="f">
+            <iframe
+              sandbox=""
+              title="Cadre sans origine"
+              class="frame"
+              srcdoc="<!doctype html><meta charset='utf-8'><body style='margin:0;font:14px system-ui,sans-serif'><label for='x' style='display:block;font-weight:600;margin-bottom:4px'>N° SIREN</label><input id='x' style='box-sizing:border-box;width:100%;padding:6px 8px;font:inherit;border:1px solid #c7c9d1;border-radius:6px'></body>"
+            ></iframe>
+            <template>
+              <p>
+                Attendu : SIREN. Iframe en bac à sable : son origine est opaque, donc différente de
+                celle de la page.
+              </p>
+              <pre><code>&lt;iframe sandbox="" srcdoc="..."&gt;</code></pre>
+            </template>
+          </div>
+
+          <div class="f" id="dynamicSlot">
+            <button type="button" id="addField" class="add">Ajouter un champ</button>
+            <template>
+              <p>
+                Attendu : SIRET. Le champ n'existe pas au chargement de la page, il est ajouté au
+                clic.
+              </p>
+            </template>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <footer>
-      <p>
-        Les numéros générés sont fictifs mais valides : un tirage peut coïncider avec une entreprise
-        réelle. À utiliser uniquement pour des tests.
-      </p>
-    </footer>
     <script src="demo.js"></script>
   </body>
 </html>
